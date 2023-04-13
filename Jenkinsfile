@@ -49,12 +49,13 @@ environment{
             steps{
                 script{
                         withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
+                    
                         sh """
+                        docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
                         docker tag catalogue:${VERSION}  techworldwithsiva/catalogue:${VERSION}
                         docker push techworldwithsiva/catalogue:${VERSION}
                         """
-                    }
+                    
                 }
                 }
             }
