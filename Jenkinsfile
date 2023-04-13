@@ -7,6 +7,8 @@ environment{
         AWS_ACCOUNT_ID="752692907119"
         REGION="ap-south-1"
         REPO_URI="${AWS_ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/catalogue"
+        DOCKER_REGISTRY = 'docker.io'
+        DOCKER_REGISTRY_CREDENTIALS = 'docker-creds'
     }
   stages {
     stage('Clone') {
@@ -42,13 +44,18 @@ environment{
                 }
             }
         }
+        
     stage('Image push to Docker Hub'){
             steps{
                 script{
+                        withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_USERNAME}", "${DOCKER_PASSWORD}") {
                         sh """
                         docker tag catalogue:${VERSION}  techworldwithsiva/catalogue:${VERSION}
                         docker push techworldwithsiva/catalogue:${VERSION}
                         """
+                    }
+                }
                 }
             }
         }
