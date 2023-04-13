@@ -52,6 +52,19 @@ environment{
                 }
             }
         }
+    stage('Deployment'){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-auth', region: "${REGION}") {
+                        sh """
+                        aws eks update-kubeconfig --region ${REGION} --name eks-cluster
+                        cd helm
+                        helm install catalogue .
+                        """
+                    }
+                }
+            }
+        }
   
 
 }
