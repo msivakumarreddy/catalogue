@@ -42,6 +42,16 @@ environment{
                 }
             }
         }
+    stage('Image push to Docker Hub'){
+            steps{
+                script{
+                        sh """
+                        docker tag catalogue:${VERSION}  techworldwithsiva/catalogue:${VERSION}
+                        docker push techworldwithsiva/catalogue:${VERSION}
+                        """
+                }
+            }
+        }
   
 
 }
