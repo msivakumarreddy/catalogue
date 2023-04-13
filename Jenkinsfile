@@ -67,7 +67,7 @@ environment{
                         sh """
                         aws eks update-kubeconfig --region ${REGION} --name eks-cluster
                         cd helm
-                        helm upgrade catalogue --set deployment.imageVersion=${VERSION}.
+                        helm upgrade catalogue . --set deployment.imageVersion=${VERSION}
                         """
                     }
                 }
